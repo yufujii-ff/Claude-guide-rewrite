@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>使っている側の結論 — AI学習まとめ 第3部</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#E7E8EC; --paper:#FCFCFD; --ink:#15171C; --sub:#5C6373;
+  --line:#D2D5DD; --line-soft:#E4E6EB;
+  --accent:#3B45D6; --accent-soft:#E7E8FB;
+  --ochre:#9C6716; --ochre-soft:#F6EEDF;
+  --mono:'JetBrains Mono','SFMono-Regular',Consolas,monospace;
+  --disp:'Shippori Mincho B1',serif;
+  --body:'Zen Kaku Gothic New',-apple-system,sans-serif;
+  --r:3px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);
+  line-height:1.9;font-size:15px;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-underline-offset:3px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.wrap{max-width:760px;margin:0 auto;padding:0 28px}
+
+/* ---- シリーズナビ ---- */
+.series{position:sticky;top:0;z-index:20;background:rgba(231,232,236,.92);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.series-in{max-width:760px;margin:0 auto;padding:11px 28px;
+  display:flex;gap:6px;align-items:center;overflow-x:auto}
+.series a{font-family:var(--mono);font-size:11.5px;text-decoration:none;
+  color:var(--sub);padding:4px 10px;border-radius:2px;white-space:nowrap;
+  border:1px solid transparent}
+.series a:hover{color:var(--ink);background:#DDDFE5}
+.series a.on{color:#fff;background:var(--accent)}
+.series .brand{font-family:var(--body);font-size:11.5px;color:#9AA0AD;
+  margin-right:8px;white-space:nowrap}
+
+/* ---- hero ---- */
+.hero{padding:64px 0 48px}
+.part{font-family:var(--mono);font-size:11px;letter-spacing:.2em;
+  color:var(--accent);margin-bottom:18px}
+h1{font-family:var(--disp);font-weight:800;font-size:clamp(32px,6vw,52px);
+  line-height:1.22;margin-bottom:18px}
+.lede{font-size:16px;color:var(--sub);line-height:1.95}
+.meta{margin-top:28px;padding-top:18px;border-top:1px solid var(--line);
+  font-family:var(--mono);font-size:11.5px;color:#9AA0AD}
+
+/* ---- 本文 ---- */
+section{padding:44px 0;border-top:1px solid var(--line)}
+.num{font-family:var(--mono);font-size:11px;letter-spacing:.16em;
+  color:#9AA0AD;margin-bottom:10px}
+h2{font-family:var(--disp);font-weight:600;font-size:27px;
+  line-height:1.4;margin-bottom:20px}
+h3{font-family:var(--body);font-weight:700;font-size:16.5px;
+  margin:28px 0 10px}
+p{margin-bottom:15px}
+p:last-child{margin-bottom:0}
+ul,ol{margin:0 0 15px;padding-left:1.3em}
+li{margin-bottom:6px}
+li::marker{color:#A9AEBA}
+strong{font-weight:700}
+code{font-family:var(--mono);font-size:.88em;background:#EDEEF2;
+  padding:1px 5px;border-radius:3px}
+
+pre{background:#1B1E25;color:#DCDFE6;font-family:var(--mono);
+  font-size:12.5px;line-height:1.85;padding:18px 20px;border-radius:var(--r);
+  overflow-x:auto;margin:20px 0}
+pre .c{color:#767D8C}
+pre .a{color:#A8B3F5}
+
+.pull{font-family:var(--disp);font-size:20px;line-height:1.65;
+  color:var(--accent);border-left:3px solid var(--accent);
+  padding:4px 0 4px 20px;margin:26px 0}
+
+.note{border-left:2px solid var(--ochre);background:var(--ochre-soft);
+  padding:14px 18px;margin:22px 0;font-size:13.5px;line-height:1.8}
+.note strong{color:var(--ochre)}
+
+table{width:100%;border-collapse:collapse;background:var(--paper);
+  border:1px solid var(--line);font-size:13.5px;margin:20px 0}
+th,td{text-align:left;padding:11px 15px;border-bottom:1px solid var(--line-soft);
+  vertical-align:top}
+th{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--sub);font-weight:500;background:#F4F5F7}
+tr:last-child td{border-bottom:none}
+td code{background:transparent;padding:0;color:var(--accent);font-weight:700}
+.tbl{overflow-x:auto}
+
+/* ---- 3層図 ---- */
+.stack{margin:26px 0;border:1px solid var(--line);border-radius:var(--r);
+  overflow:hidden;background:var(--paper)}
+.layer{padding:16px 20px;border-bottom:1px solid var(--line-soft);
+  display:flex;gap:16px;align-items:baseline;flex-wrap:wrap}
+.layer:last-child{border-bottom:none}
+.layer .id{font-family:var(--mono);font-size:16px;font-weight:700;
+  color:var(--accent);flex:none;width:24px}
+.layer .nm{font-weight:700;font-size:15px;flex:none;min-width:150px}
+.layer .ds{font-size:13.5px;color:var(--sub);flex:1;min-width:180px}
+.layer.l3{background:var(--accent-soft)}
+
+/* ---- ループ図 ---- */
+.loop{counter-reset:s;margin:22px 0;padding:0;list-style:none}
+.loop li{counter-increment:s;position:relative;padding:9px 0 9px 42px;
+  border-bottom:1px dashed var(--line);font-size:14px;margin:0}
+.loop li:last-child{border-bottom:none}
+.loop li::before{content:counter(s);position:absolute;left:0;top:9px;
+  font-family:var(--mono);font-size:11px;color:#fff;background:var(--accent);
+  width:22px;height:22px;border-radius:50%;display:grid;place-items:center}
+
+footer{padding:40px 0 60px;border-top:1px solid var(--line);
+  font-size:13px;color:var(--sub)}
+.nextlink{display:inline-block;margin-top:18px;font-family:var(--mono);
+  font-size:12.5px;text-decoration:none;padding:9px 16px;
+  border:1px solid var(--accent);border-radius:var(--r);color:var(--accent)}
+.nextlink:hover{background:var(--accent);color:#fff}
+.src{margin-top:24px;font-size:12.5px;line-height:1.85}
+.src a{color:var(--sub)}
+
+@media (max-width:640px){
+  .wrap{padding:0 20px}
+  .series-in{padding:10px 20px}
+  .hero{padding:44px 0 36px}
+  .pull{font-size:17px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* ---- 数字 ---- */
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));
+  gap:1px;background:var(--line);border:1px solid var(--line);
+  border-radius:var(--r);overflow:hidden;margin:24px 0}
+.figs div{background:var(--paper);padding:12px 15px}
+.figs dt{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--sub)}
+.figs dd{font-family:var(--mono);font-size:18px;margin-top:2px;
+  font-variant-numeric:tabular-nums}
+.end{display:inline-block;margin-top:18px;font-family:var(--mono);
+  font-size:12.5px;text-decoration:none;padding:9px 16px;
+  border:1px solid var(--line);border-radius:var(--r);color:var(--sub)}
+.end:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ---- 数字 ---- */
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));
+  gap:1px;background:var(--line);border:1px solid var(--line);
+  border-radius:var(--r);overflow:hidden;margin:24px 0}
+.figs div{background:var(--paper);padding:12px 15px}
+.figs dt{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--sub)}
+.figs dd{font-family:var(--mono);font-size:18px;margin-top:2px;
+  font-variant-numeric:tabular-nums}
+.end{display:inline-block;margin-top:18px;font-family:var(--mono);
+  font-size:12.5px;text-decoration:none;padding:9px 16px;
+  border:1px solid var(--line);border-radius:var(--r);color:var(--sub)}
+.end:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ---- X投稿（公式埋め込み） ---- */
+.xembed{margin:22px 0}
+.xembed .twitter-tweet{margin:0 !important;max-width:100% !important}
+.xembed .twitter-tweet:not(.twitter-tweet-rendered){
+  background:var(--paper);border:1px solid var(--line);
+  border-left:3px solid var(--accent);border-radius:var(--r);
+  padding:14px 18px;font-family:var(--mono);font-size:12px;line-height:1.7}
+.xembed .twitter-tweet:not(.twitter-tweet-rendered) a{color:var(--sub)}
+</style>
+</head>
+<body>
+
+<nav class="series">
+  <div class="series-in">
+    <span class="brand">AI学習まとめ</span>
+    <a href="index.html">目次</a>
+    <a href="part1.html">1 Claude Code</a>
+    <a href="part2.html">2 使わない</a>
+    <a href="part3.html" class="on">3 使っている側</a>
+    <a href="part4.html">4 読み方</a>
+  </div>
+</nav>
+
+<header class="hero wrap">
+  <div class="part">PART 3 / 4</div>
+  <h1>使っている側の結論</h1>
+  <p class="lede">拒否の声とは別の層に、実際に業務でAIを使っている人たちの投稿がある。数は少なく拡散もしないが、結論はほぼ一致していた。そして、道具そのものの評価だけは見事に割れていた。</p>
+  <div class="meta">学習まとめ 第3部 ／ 2026-08</div>
+</header>
+
+<main class="wrap">
+
+<section id="s4">
+  <div class="num">04</div>
+  <h2>実務層の合意点は「下書きはAI、判断は人」</h2>
+
+  <p>第2部で見た拒否の声とは別の層に、実際に業務で使っている人たちの投稿がある。数は多くないし、♥も三桁台が中心で目立たない。ただ<strong>結論はほぼ揃っていた</strong>。</p>
+
+  <div class="xembed">
+    <blockquote class="twitter-tweet" data-lang="ja" data-dnt="true"><a href="https://x.com/tsuchinao83/status/2089353221622124549">&#64;tsuchinao83 の投稿を X で見る &rarr;</a></blockquote>
+  </div>
+
+  <p>「AIが作るのはドラフトと構造、判断するのは人」。この一文が、今回集めた実務系の投稿に共通する結論だったと思う。第1部で Claude Code を触りながら感じた「人間が環境と範囲を設計する側に回る」という話とも、そのまま重なる。</p>
+
+  <div class="pull">ツールを使い倒すことと、思考を委ねることは全く別物。</div>
+
+  <p>面白いのは、<strong>AI企業自身が同じ結論に沿って動いている</strong>ように見えることだった。</p>
+
+  <div class="xembed">
+    <blockquote class="twitter-tweet" data-lang="ja" data-dnt="true"><a href="https://x.com/qzqrnl/status/2089867386098962726">&#64;qzqrnl の投稿を X で見る &rarr;</a></blockquote>
+  </div>
+
+  <p>最先端のモデルを最も自由に使える会社が、人の手による編集に高い値段をつけている。この事実は、生成物の限界を外側から説明するどんな議論よりも具体的だと感じた。</p>
+
+  <p>生成物そのものについても、似た角度の指摘がある。</p>
+
+  <div class="xembed">
+    <blockquote class="twitter-tweet" data-lang="ja" data-dnt="true"><a href="https://x.com/InSane2250/status/2089325839246827879">&#64;InSane2250 の投稿を X で見る &rarr;</a></blockquote>
+  </div>
+
+  <p>逆に、AIに寄りかかった側がどうなるかを観察した報告もあった。</p>
+
+  <div class="xembed">
+    <blockquote class="twitter-tweet" data-lang="ja" data-dnt="true"><a href="https://x.com/Natalia29161890/status/2089006544767885318">&#64;Natalia29161890 の投稿を X で見る &rarr;</a></blockquote>
+  </div>
+
+  <p>「それっぽい論点や仮説はたくさん出てくるが、表層的で、仕留める力が弱くなった」——これは自分にも起こりうる話だと思う。下書きを出させることと、考えることを外注してしまうことの境目は、思っているより曖昧だ。</p>
+
+  <p>組織の側の数字としては、こういうものもあった。</p>
+
+  <div class="xembed">
+    <blockquote class="twitter-tweet" data-lang="ja" data-dnt="true"><a href="https://x.com/uchita_success/status/2088957272873738698">&#64;uchita_success の投稿を X で見る &rarr;</a></blockquote>
+  </div>
+
+  <p>日本企業の「期待超えの成果」が9%、米国が38%。この差を分けたのが業務プロセスへの組み込みだとすれば、これは<strong>道具の性能ではなく組織側の問題</strong>ということになる。</p>
+</section>
+
+<section id="s5">
+  <div class="num">05</div>
+  <h2>ツールの評価は割れていて、乗り換えが常態になっている</h2>
+
+  <p>もうひとつ、実務層の投稿で目立ったのがモデルの比較だった。ただしこれは<strong>まったく一致していない</strong>。同じ週の投稿が、正反対の評価を下している。</p>
+
+  <div class="xembed">
+    <blockquote class="twitter-tweet" data-lang="ja" data-dnt="true"><a href="https://x.com/cwmasaki/status/2088433897445171301">&#64;cwmasaki の投稿を X で見る &rarr;</a></blockquote>
+  </div>
+
+  <div class="xembed">
+    <blockquote class="twitter-tweet" data-lang="ja" data-dnt="true"><a href="https://x.com/K_Ishi_AI/status/2089650078407647406">&#64;K_Ishi_AI の投稿を X で見る &rarr;</a></blockquote>
+  </div>
+
+  <p>ところが、同じ Gemini についてこういう反応もある。</p>
+
+  <div class="xembed">
+    <blockquote class="twitter-tweet" data-lang="ja" data-dnt="true"><a href="https://x.com/Ijoru/status/2088065751647432794">&#64;Ijoru の投稿を X で見る &rarr;</a></blockquote>
+  </div>
+
+  <p>三者とも実際に使ったうえでの感想で、どれも嘘ではないのだと思う。<strong>評価が用途とタイミングに強く依存している</strong>だけだ。だとすると、この種の「AはBより良い」という投稿は、そのまま自分の判断材料にはできない。使う自分の用途と、投稿の日付を毎回確認する必要がある。</p>
+
+  <p>企業レベルでも、同じことが起きているらしい。</p>
+
+  <div class="xembed">
+    <blockquote class="twitter-tweet" data-lang="ja" data-dnt="true"><a href="https://x.com/tktokyoBTC/status/2090591329038242264">&#64;tktokyoBTC の投稿を X で見る &rarr;</a></blockquote>
+  </div>
+
+  <div class="note">
+    <strong>ここまでで気づいたこと</strong> 第2部の拒否派と、第3部の実務層は、同じ「AI」という語で違うものを指している。前者が指しているのは主に画像・文章の生成物で、後者が指しているのは業務プロセスに組み込む道具だ。議論が噛み合わないのは当然で、そもそも対象が違う。
+  </div>
+</section>
+
+</main>
+
+<footer class="wrap">
+  <div>第3部はここまで。次は、こうした投稿をタイムラインから拾うときに何に気をつけるべきかを書く。</div>
+  <a class="nextlink" href="part4.html">第4部へ進む &rarr;</a>
+
+  <div class="src">
+    <strong>データ</strong><br>
+    ・第2部と同じ収集セット（193件・158アカウント・2026-08中心）からの引用<br>
+    ・投稿は X の公式埋め込みで表示しているため、本文・数値・公開状態は X 側の現在の状態を反映する<br>
+    ・集計値は取得時点のもの／ 集め方と限界は<a href="part4.html#s8">第4部</a>
+  </div>
+</footer>
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</body>
+</html>

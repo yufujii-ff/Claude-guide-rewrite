@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>タイムラインの読み方 — AI学習まとめ 第4部</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#E7E8EC; --paper:#FCFCFD; --ink:#15171C; --sub:#5C6373;
+  --line:#D2D5DD; --line-soft:#E4E6EB;
+  --accent:#3B45D6; --accent-soft:#E7E8FB;
+  --ochre:#9C6716; --ochre-soft:#F6EEDF;
+  --mono:'JetBrains Mono','SFMono-Regular',Consolas,monospace;
+  --disp:'Shippori Mincho B1',serif;
+  --body:'Zen Kaku Gothic New',-apple-system,sans-serif;
+  --r:3px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);
+  line-height:1.9;font-size:15px;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-underline-offset:3px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.wrap{max-width:760px;margin:0 auto;padding:0 28px}
+
+/* ---- シリーズナビ ---- */
+.series{position:sticky;top:0;z-index:20;background:rgba(231,232,236,.92);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.series-in{max-width:760px;margin:0 auto;padding:11px 28px;
+  display:flex;gap:6px;align-items:center;overflow-x:auto}
+.series a{font-family:var(--mono);font-size:11.5px;text-decoration:none;
+  color:var(--sub);padding:4px 10px;border-radius:2px;white-space:nowrap;
+  border:1px solid transparent}
+.series a:hover{color:var(--ink);background:#DDDFE5}
+.series a.on{color:#fff;background:var(--accent)}
+.series .brand{font-family:var(--body);font-size:11.5px;color:#9AA0AD;
+  margin-right:8px;white-space:nowrap}
+
+/* ---- hero ---- */
+.hero{padding:64px 0 48px}
+.part{font-family:var(--mono);font-size:11px;letter-spacing:.2em;
+  color:var(--accent);margin-bottom:18px}
+h1{font-family:var(--disp);font-weight:800;font-size:clamp(32px,6vw,52px);
+  line-height:1.22;margin-bottom:18px}
+.lede{font-size:16px;color:var(--sub);line-height:1.95}
+.meta{margin-top:28px;padding-top:18px;border-top:1px solid var(--line);
+  font-family:var(--mono);font-size:11.5px;color:#9AA0AD}
+
+/* ---- 本文 ---- */
+section{padding:44px 0;border-top:1px solid var(--line)}
+.num{font-family:var(--mono);font-size:11px;letter-spacing:.16em;
+  color:#9AA0AD;margin-bottom:10px}
+h2{font-family:var(--disp);font-weight:600;font-size:27px;
+  line-height:1.4;margin-bottom:20px}
+h3{font-family:var(--body);font-weight:700;font-size:16.5px;
+  margin:28px 0 10px}
+p{margin-bottom:15px}
+p:last-child{margin-bottom:0}
+ul,ol{margin:0 0 15px;padding-left:1.3em}
+li{margin-bottom:6px}
+li::marker{color:#A9AEBA}
+strong{font-weight:700}
+code{font-family:var(--mono);font-size:.88em;background:#EDEEF2;
+  padding:1px 5px;border-radius:3px}
+
+pre{background:#1B1E25;color:#DCDFE6;font-family:var(--mono);
+  font-size:12.5px;line-height:1.85;padding:18px 20px;border-radius:var(--r);
+  overflow-x:auto;margin:20px 0}
+pre .c{color:#767D8C}
+pre .a{color:#A8B3F5}
+
+.pull{font-family:var(--disp);font-size:20px;line-height:1.65;
+  color:var(--accent);border-left:3px solid var(--accent);
+  padding:4px 0 4px 20px;margin:26px 0}
+
+.note{border-left:2px solid var(--ochre);background:var(--ochre-soft);
+  padding:14px 18px;margin:22px 0;font-size:13.5px;line-height:1.8}
+.note strong{color:var(--ochre)}
+
+table{width:100%;border-collapse:collapse;background:var(--paper);
+  border:1px solid var(--line);font-size:13.5px;margin:20px 0}
+th,td{text-align:left;padding:11px 15px;border-bottom:1px solid var(--line-soft);
+  vertical-align:top}
+th{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--sub);font-weight:500;background:#F4F5F7}
+tr:last-child td{border-bottom:none}
+td code{background:transparent;padding:0;color:var(--accent);font-weight:700}
+.tbl{overflow-x:auto}
+
+/* ---- 3層図 ---- */
+.stack{margin:26px 0;border:1px solid var(--line);border-radius:var(--r);
+  overflow:hidden;background:var(--paper)}
+.layer{padding:16px 20px;border-bottom:1px solid var(--line-soft);
+  display:flex;gap:16px;align-items:baseline;flex-wrap:wrap}
+.layer:last-child{border-bottom:none}
+.layer .id{font-family:var(--mono);font-size:16px;font-weight:700;
+  color:var(--accent);flex:none;width:24px}
+.layer .nm{font-weight:700;font-size:15px;flex:none;min-width:150px}
+.layer .ds{font-size:13.5px;color:var(--sub);flex:1;min-width:180px}
+.layer.l3{background:var(--accent-soft)}
+
+/* ---- ループ図 ---- */
+.loop{counter-reset:s;margin:22px 0;padding:0;list-style:none}
+.loop li{counter-increment:s;position:relative;padding:9px 0 9px 42px;
+  border-bottom:1px dashed var(--line);font-size:14px;margin:0}
+.loop li:last-child{border-bottom:none}
+.loop li::before{content:counter(s);position:absolute;left:0;top:9px;
+  font-family:var(--mono);font-size:11px;color:#fff;background:var(--accent);
+  width:22px;height:22px;border-radius:50%;display:grid;place-items:center}
+
+footer{padding:40px 0 60px;border-top:1px solid var(--line);
+  font-size:13px;color:var(--sub)}
+.nextlink{display:inline-block;margin-top:18px;font-family:var(--mono);
+  font-size:12.5px;text-decoration:none;padding:9px 16px;
+  border:1px solid var(--accent);border-radius:var(--r);color:var(--accent)}
+.nextlink:hover{background:var(--accent);color:#fff}
+.src{margin-top:24px;font-size:12.5px;line-height:1.85}
+.src a{color:var(--sub)}
+
+@media (max-width:640px){
+  .wrap{padding:0 20px}
+  .series-in{padding:10px 20px}
+  .hero{padding:44px 0 36px}
+  .pull{font-size:17px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* ---- 数字 ---- */
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));
+  gap:1px;background:var(--line);border:1px solid var(--line);
+  border-radius:var(--r);overflow:hidden;margin:24px 0}
+.figs div{background:var(--paper);padding:12px 15px}
+.figs dt{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--sub)}
+.figs dd{font-family:var(--mono);font-size:18px;margin-top:2px;
+  font-variant-numeric:tabular-nums}
+.end{display:inline-block;margin-top:18px;font-family:var(--mono);
+  font-size:12.5px;text-decoration:none;padding:9px 16px;
+  border:1px solid var(--line);border-radius:var(--r);color:var(--sub)}
+.end:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ---- 数字 ---- */
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));
+  gap:1px;background:var(--line);border:1px solid var(--line);
+  border-radius:var(--r);overflow:hidden;margin:24px 0}
+.figs div{background:var(--paper);padding:12px 15px}
+.figs dt{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--sub)}
+.figs dd{font-family:var(--mono);font-size:18px;margin-top:2px;
+  font-variant-numeric:tabular-nums}
+.end{display:inline-block;margin-top:18px;font-family:var(--mono);
+  font-size:12.5px;text-decoration:none;padding:9px 16px;
+  border:1px solid var(--line);border-radius:var(--r);color:var(--sub)}
+.end:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ---- X投稿（公式埋め込み） ---- */
+.xembed{margin:22px 0}
+.xembed .twitter-tweet{margin:0 !important;max-width:100% !important}
+.xembed .twitter-tweet:not(.twitter-tweet-rendered){
+  background:var(--paper);border:1px solid var(--line);
+  border-left:3px solid var(--accent);border-radius:var(--r);
+  padding:14px 18px;font-family:var(--mono);font-size:12px;line-height:1.7}
+.xembed .twitter-tweet:not(.twitter-tweet-rendered) a{color:var(--sub)}
+</style>
+</head>
+<body>
+
+<nav class="series">
+  <div class="series-in">
+    <span class="brand">AI学習まとめ</span>
+    <a href="index.html">目次</a>
+    <a href="part1.html">1 Claude Code</a>
+    <a href="part2.html">2 使わない</a>
+    <a href="part3.html">3 使っている側</a>
+    <a href="part4.html" class="on">4 読み方</a>
+  </div>
+</nav>
+
+<header class="hero wrap">
+  <div class="part">PART 4 / 4</div>
+  <h1>タイムラインの読み方</h1>
+  <p class="lede">193件を集めてみて分かったのは、意見の内容だけではなかった。いいね数で足切りしても消えないテンプレート投稿の存在と、拡散する見出しが元記事から一段ずれていくこと。集め方とその限界も含めて書いておく。</p>
+  <div class="meta">学習まとめ 第4部 ／ 2026-08</div>
+</header>
+
+<main class="wrap">
+
+<section id="s6">
+  <div class="num">06</div>
+  <h2>ノイズの形そのものが観測結果だった</h2>
+
+  <p>193件を集めるにあたって、いいね数で足切り（<code>min_faves:100</code>〜<code>200</code>）をかけた。それでも消えない層がある。</p>
+
+  <p>「一度だけ言っておく」「100株でいい」「こういう銘柄はニュースになってからでは遅い」という<strong>ほぼ同一のテンプレートが、別アカウント6件から投稿されていた</strong>。中身は冷却・AI半導体・電力に差し替えられているだけだ。</p>
+
+  <div class="tbl">
+  <table>
+    <tr><th>フレーズ</th><th>該当</th><th>いいね</th></tr>
+    <tr><td><code>一度だけ言っておく</code> / <code>一度しか言いません</code></td><td>6件</td><td>72〜200</td></tr>
+    <tr><td><code>100株でいい</code></td><td>5件</td><td>72〜200</td></tr>
+    <tr><td><code>ニュースになってからでは遅い</code></td><td>6件</td><td>72〜200</td></tr>
+  </table>
+  </div>
+
+  <p>代表として1件だけ引いておく。</p>
+
+  <div class="xembed">
+    <blockquote class="twitter-tweet" data-lang="ja" data-dnt="true"><a href="https://x.com/Kuro_81104/status/2089982812829130805">&#64;Kuro_81104 の投稿を X で見る &rarr;</a></blockquote>
+  </div>
+
+  <p>同種のものとして「AIで月280万円」型の成功談や、「保存版」型のツール紹介がある。</p>
+
+  <div class="xembed">
+    <blockquote class="twitter-tweet" data-lang="ja" data-dnt="true"><a href="https://x.com/tatsuki_nowave/status/2090214728677359974">&#64;tatsuki_nowave の投稿を X で見る &rarr;</a></blockquote>
+  </div>
+
+  <p>AI関連の検索結果の質は、実質<strong>この層をどう外すか</strong>で決まる。いいね数での足切りは効かない。テンプレートの文面そのもので弾くか、アカウントの投稿履歴を見るしかないと思う。集めてみて初めて分かったことで、これ自体が今回の収穫だった。</p>
+</section>
+
+<section id="s7">
+  <div class="num">07</div>
+  <h2>元記事に当たると話が変わる</h2>
+
+  <p>今回いちばん実務的な教訓はこれだった。まず、拡散していたニュース。</p>
+
+  <div class="xembed">
+    <blockquote class="twitter-tweet" data-lang="ja" data-dnt="true"><a href="https://x.com/AUTOMATONJapan/status/2088209494354567486">&#64;AUTOMATONJapan の投稿を X で見る &rarr;</a></blockquote>
+  </div>
+
+  <p>「ゲーム業界で生成AI使用禁止が当たり前になった」という文脈で、この記事はかなり引用されていた。ところが同じ収集範囲の中に、その読まれ方を訂正する投稿があった。</p>
+
+  <div class="xembed">
+    <blockquote class="twitter-tweet" data-lang="ja" data-dnt="true"><a href="https://x.com/x2775co/status/2088415367475720447">&#64;x2775co の投稿を X で見る &rarr;</a></blockquote>
+  </div>
+
+  <p>「ゲーム業界全体を調査した統計」ではなく「北米のインディー〜AA規模を扱う弁護士の証言」である。この違いは小さくない。</p>
+
+  <div class="pull">Xで拡散するのは、見出しの抽象度が一段上がった版である。</div>
+
+  <p>同じ現象は<a href="part2.html#s2">第2部</a>の電気代の話でも起きていた。日経の「AI電力網は国民負担？」が「AIのせいで電気代が上がる」として拡散し、主因は物価・人件費・金利だという訂正は ♥140 で止まっている。<strong>この1週間の収集範囲だけで2件</strong>観測できたことになる。</p>
+
+  <p>第1部でハーネスを組みながら「AIの出力は検証してから使う」と書いたが、それはタイムラインから拾う情報についてもまったく同じだった。</p>
+</section>
+
+<section id="s8">
+  <div class="num">08</div>
+  <h2>手法と限界</h2>
+
+  <p>集め方は、X の Web App が使っている内部APIを、ログイン済みのブラウザ越しに叩く方式をとった。Cookie や CSRF を自前で用意するのではなく、ブラウザの中で動いているX自身のAPIクライアントにリクエストを代行させている。</p>
+
+  <div class="tbl">
+  <table>
+    <tr><th>項目</th><th>内容</th></tr>
+    <tr><td>取得元</td><td>SearchTimeline（Top タブ）</td></tr>
+    <tr><td>クエリ</td><td><code>AIエージェント</code> / <code>AI ニュース</code> / <code>生成AI</code> / <code>OpenAI OR Anthropic OR Gemini</code>（すべて <code>lang:ja</code> + いいね数の下限つき）</td></tr>
+    <tr><td>件数</td><td>193件・158アカウント（重複除去後）</td></tr>
+    <tr><td>時期</td><td>179件が 2026-08。残りは検索が拾った古い投稿</td></tr>
+  </table>
+  </div>
+
+  <div class="note">
+    <strong>限界</strong> Top タブは X 側でランキング済みの結果なので、ここでいう「多かった」は<strong>「反応が大きかった」であって、世論の分布ではない</strong>。またいいね数で足切りしているため、無言のシェアや小さな声は最初から入っていない。拒否派の可視性が高く出ている可能性がある。
+  </div>
+
+  <p>加えて、Xの検索は非決定的で、同じクエリでも毎回違う部分集合が返る。<code>min_faves</code> や日付の指定も境界を越えてこぼれることがある。だからここに書いたことは<strong>この193件についての記述</strong>であって、母集団の推定ではない。</p>
+
+  <p>本文中で数を挙げた箇所（テンプレート6件、電気代への言及5件など）は、集めたデータ上で機械的に数えたもの。引用した投稿の本文・著者・数値・日付は、取得した時点のまま載せている。</p>
+
+  <div class="pull">この193件について言えること以上は、言わないでおく。</div>
+</section>
+
+</main>
+
+<footer class="wrap">
+  <div>第4部はここまで。第2部から第4部は、同じ193件の収集データを別の角度から見たものです。</div>
+  <a class="end" href="index.html">&larr; 目次へ戻る</a>
+
+  <div class="src">
+    <strong>データ</strong><br>
+    ・X SearchTimeline（Top タブ）／ 4クエリ ／ 193件・158アカウント ／ 2026-08 中心<br>
+    ・投稿は X の公式埋め込みで表示しているため、本文・著者・数値・公開状態は X 側の現在の状態を反映する<br>
+    ・表・集計値は取得時点のもの<br>
+    ・数値の照合は収集データ上で機械的に実施
+  </div>
+</footer>
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</body>
+</html>

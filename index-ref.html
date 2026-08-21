@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI学習まとめ — 目次</title>
+<title>索引 — AI学習まとめ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -128,29 +128,25 @@ footer{padding:40px 0 60px;border-top:1px solid var(--line);
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 
-/* ---- 目次 ---- */
-.toc{margin:8px 0 0;padding:0;list-style:none;border:1px solid var(--line);
-  border-radius:var(--r);overflow:hidden;background:var(--paper)}
-.toc li{margin:0;border-bottom:1px solid var(--line-soft)}
-.toc li:last-child{border-bottom:none}
-.toc a,.toc .off{display:flex;gap:18px;align-items:baseline;flex-wrap:wrap;
-  padding:20px 22px;text-decoration:none;color:inherit}
-.toc a:hover{background:#F2F3F7}
-.toc .no{font-family:var(--mono);font-size:11px;letter-spacing:.16em;
-  color:var(--accent);flex:none;width:52px}
-.toc .bd{flex:1;min-width:220px}
-.toc .ti{font-family:var(--disp);font-weight:600;font-size:19px;
-  line-height:1.45;margin-bottom:5px}
-.toc .ds{font-size:13.5px;color:var(--sub);line-height:1.8}
-.toc .off{opacity:.5}
-.toc .off .no{color:#9AA0AD}
-.toc .tag{font-family:var(--mono);font-size:10.5px;color:#9AA0AD;
-  border:1px solid var(--line);border-radius:2px;padding:2px 7px;
-  margin-left:8px;white-space:nowrap;vertical-align:2px}
-.appendix{margin-top:30px;padding:18px 22px;border:1px dashed var(--line);
-  border-radius:var(--r);font-size:13.5px;line-height:1.85;color:var(--sub)}
-
-.secnote{font-size:13.5px;color:var(--sub);margin:-8px 0 16px}
+/* ---- 索引 ---- */
+.idxgrp{margin:0 0 30px}
+.idxgrp h3{margin:0 0 4px;font-size:14px;color:var(--sub);font-weight:700;
+  letter-spacing:.04em}
+.idx{list-style:none;margin:0;padding:0;border-top:1px solid var(--line-soft)}
+.idx li{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;
+  padding:10px 2px;border-bottom:1px solid var(--line-soft);margin:0;
+  font-size:14px}
+.idx li::marker{content:none}
+.idx .tm{flex:none;font-weight:500}
+.idx .dt{flex:1;min-width:16px;border-bottom:1px dotted #C9CDD8;
+  transform:translateY(-4px)}
+.idx .to{flex:none;font-family:var(--mono);font-size:11.5px;
+  white-space:nowrap;color:#9AA0AD}
+.idx .to a{text-decoration:none;color:var(--accent);
+  border-bottom:1px solid transparent}
+.idx .to a:hover{border-bottom-color:var(--accent)}
+.howto{border-left:2px solid var(--ochre);background:var(--ochre-soft);
+  padding:14px 18px;margin:0 0 30px;font-size:13.5px;line-height:1.8}
 </style>
 </head>
 <body>
@@ -158,7 +154,7 @@ footer{padding:40px 0 60px;border-top:1px solid var(--line);
 <nav class="series">
   <div class="series-in">
     <span class="brand">AI学習まとめ</span>
-    <a href="index.html" class="on">目次</a>
+    <a href="index.html">目次</a>
     <a href="part1.html">1 Claude Code</a>
     <a href="part2.html">2 使わない</a>
     <a href="part3.html">3 使っている側</a>
@@ -167,91 +163,86 @@ footer{padding:40px 0 60px;border-top:1px solid var(--line);
 </nav>
 
 <header class="hero wrap">
-  <div class="part">CONTENTS</div>
-  <h1>AI学習まとめ</h1>
-  <p class="lede">Claude Code を触りながら学んだことと、その道具でXの投稿を193件集めて読んだ記録。第1部で道具そのものを理解し、第2部以降は集めたデータをもとに「世の中がAIをどう受け止めているか」を見ていく。</p>
-  <div class="meta">全4部 ／ 2026-08</div>
+  <div class="part">INDEX &#47; &#24341;&#12367;&#29992;</div>
+  <h1>索引</h1>
+  <p class="lede">通して読むための入口は<a href="index.html">目次</a>のほう。こちらは「あの話はどこだったか」を引くためのページで、用語やトピックから該当箇所へ直接飛べる。</p>
+  <div class="meta">第1部＋付録 ／ 2026-08</div>
 </header>
 
 <main class="wrap">
 
-<section id="toc">
-  <div class="num">READ &#47; 読む用</div>
-  <h2>目次</h2>
-  <p class="secnote">通して読むための入口。第1部から順に読むことを想定しているが、第2部以降は単体でも読める。第2部〜第4部は同じ193件の収集データを別の角度から見たもの。</p>
-
-  <ul class="toc">
-    <li>
-      <a href="part1.html">
-        <div class="no">PART 1</div>
-        <div class="bd">
-          <div class="ti">Claude Code とは何か</div>
-          <div class="ds">コードを書く道具ではなく、AIに手足と権限をつけてループを回す仕組み。agentic ループの6段階、三層構造、そして設定ファイルが必要になる理由まで。</div>
-        </div>
-      </a>
-    </li>
-    <li>
-      <a href="part2.html">
-        <div class="no">PART 2</div>
-        <div class="bd">
-          <div class="ti">使わない、という意思表示</div>
-          <div class="ds">Xの日本語AI関連投稿を193件集めて読んだ。最も拡散していたのは新機能の紹介ではなく、生成AIを使うこと自体を拒む声だった。理由は精度ではなく、電気代・権利・美意識にある。</div>
-        </div>
-      </a>
-    </li>
-    <li>
-      <a href="part3.html">
-        <div class="no">PART 3</div>
-        <div class="bd">
-          <div class="ti">使っている側の結論</div>
-          <div class="ds">拒否の声とは別の層で、実務でAIを使う人たちの結論はほぼ一致していた。「下書きはAI、判断は人」。一方で、道具そのものの評価だけは見事に割れている。</div>
-        </div>
-      </a>
-    </li>
-    <li>
-      <a href="part4.html">
-        <div class="no">PART 4</div>
-        <div class="bd">
-          <div class="ti">タイムラインの読み方</div>
-          <div class="ds">いいね数で足切りしても消えないテンプレート投稿と、拡散する見出しが元記事から一段ずれていく現象。集め方とその限界まで。</div>
-        </div>
-      </a>
-    </li>
-  </ul>
+<section id="s1">
+  <div class="num">HOW TO</div>
+  <h2>行き先の見方</h2>
+  <div class="howto">
+    <strong>第1部</strong>＝連載本編。番号は節番号（例：第1部 02 ＝ 第1部の「02 どう動いているのか」）。<br>
+    <strong>付録</strong>＝<a href="harness.html">ハーネス入門</a>。L1〜L5 は <code>.claude/</code> の5層に対応する。
+  </div>
 </section>
 
-<section id="ref">
-  <div class="num">REFERENCE &#47; 引く用</div>
-  <h2>引く用</h2>
-  <p class="secnote">通読ではなく、必要な箇所だけを引くための入口。</p>
+<section id="s2">
+  <div class="num">A</div>
+  <h2>Claude Code の仕組み</h2>
 
-  <ul class="toc">
-    <li>
-      <a href="index-ref.html">
-        <div class="no">INDEX</div>
-        <div class="bd">
-          <div class="ti">索引</div>
-          <div class="ds">用語やトピックから、第1部と付録の該当箇所へ直接飛ぶ。「あの設定はどこだったか」を引くためのページ。</div>
-        </div>
-      </a>
-    </li>
-    <li>
-      <a href="harness.html">
-        <div class="no">GUIDE</div>
-        <div class="bd">
-          <div class="ti">Claude Code ハーネス入門</div>
-          <div class="ds">.claude&#47; の5層（CLAUDE.md &#47; rules &#47; skills &#47; agents &#47; settings.json）を一枚にまとめた詳細版。スキル設計・サブエージェント・外部連携まで。</div>
-        </div>
-      </a>
-    </li>
-  </ul>
+  <div class="idxgrp">
+    <ul class="idx">
+      <li><span class="tm">Claude Code とは / チャットとの違い</span><span class="dt"></span>
+        <span class="to"><a href="part1.html#s1">第1部 01</a></span></li>
+      <li><span class="tm">コード以外の用途</span><span class="dt"></span>
+        <span class="to"><a href="part1.html#s1">第1部 01</a></span></li>
+      <li><span class="tm">agentic ループ</span><span class="dt"></span>
+        <span class="to"><a href="part1.html#s2">第1部 02</a></span></li>
+      <li><span class="tm">ローカルで完結する仕組み</span><span class="dt"></span>
+        <span class="to"><a href="part1.html#s2">第1部 02</a></span></li>
+      <li><span class="tm">三層構造（モデル / ツール / 設定）</span><span class="dt"></span>
+        <span class="to"><a href="part1.html#s3">第1部 03</a></span></li>
+      <li><span class="tm">入口の種類（CLI・デスクトップ・Web・IDE）</span><span class="dt"></span>
+        <span class="to"><a href="part1.html#s3">第1部 03</a></span></li>
+      <li><span class="tm">Lost in the Middle</span><span class="dt"></span>
+        <span class="to"><a href="part1.html#s4">第1部 04</a></span></li>
+      <li><span class="tm">なぜ設定ファイルが要るのか</span><span class="dt"></span>
+        <span class="to"><a href="part1.html#s4">第1部 04</a> / <a href="harness.html#why">付録</a></span></li>
+    </ul>
+  </div>
+</section>
+
+<section id="s3">
+  <div class="num">B</div>
+  <h2>.claude&#47; の設定</h2>
+
+  <div class="idxgrp">
+    <ul class="idx">
+      <li><span class="tm">CLAUDE.md</span><span class="dt"></span>
+        <span class="to"><a href="part1.html#s5">第1部 05</a> / <a href="harness.html#l1">付録 L1</a></span></li>
+      <li><span class="tm">rules&#47;</span><span class="dt"></span>
+        <span class="to"><a href="part1.html#s5">第1部 05</a> / <a href="harness.html#l2">付録 L2</a></span></li>
+      <li><span class="tm">skills&#47;</span><span class="dt"></span>
+        <span class="to"><a href="part1.html#s5">第1部 05</a> / <a href="harness.html#l3">付録 L3</a></span></li>
+      <li><span class="tm">agents&#47;（サブエージェント）</span><span class="dt"></span>
+        <span class="to"><a href="part1.html#s5">第1部 05</a> / <a href="harness.html#l4">付録 L4</a></span></li>
+      <li><span class="tm">settings.json（権限制御）</span><span class="dt"></span>
+        <span class="to"><a href="part1.html#s5">第1部 05</a> / <a href="harness.html#l5">付録 L5</a></span></li>
+      <li><span class="tm">Hooks（イベント駆動の自動処理）</span><span class="dt"></span>
+        <span class="to"><a href="harness.html#hooks">付録 番外</a></span></li>
+      <li><span class="tm">スキル設計 / 段階的開示</span><span class="dt"></span>
+        <span class="to"><a href="harness.html#skill-design">付録</a></span></li>
+      <li><span class="tm">複数処理の組み合わせ（Sub-agent型 / Skill Chain型）</span><span class="dt"></span>
+        <span class="to"><a href="harness.html#orch">付録</a></span></li>
+      <li><span class="tm">Graph Engineering</span><span class="dt"></span>
+        <span class="to"><a href="harness.html#graph">付録</a></span></li>
+      <li><span class="tm">外部連携 / OBO トークン交換</span><span class="dt"></span>
+        <span class="to"><a href="harness.html#mcp">付録</a></span></li>
+      <li><span class="tm">導入の順序（最初の一歩）</span><span class="dt"></span>
+        <span class="to"><a href="harness.html#start">付録</a></span></li>
+    </ul>
+  </div>
 </section>
 
 </main>
 
 <footer class="wrap">
-  <div>読む順番は第1部からを想定しているが、第2部以降は単体でも読める。</div>
-  <a class="nextlink" href="part1.html">第1部から読む &rarr;</a>
+  <div>通して読むなら目次から。</div>
+  <a class="nextlink" href="index.html">&larr; 目次へ</a>
 </footer>
 
 </body>
